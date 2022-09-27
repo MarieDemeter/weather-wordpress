@@ -25,13 +25,13 @@ class CNAlpsWeather extends WP_Widget
             )
         );
     }
-
+    /*
     function print_weather()
     {
         echo "<div class='cnalps-weather-widget'>
                 <div class='weather-city'>Météo à Crest</div>
             </div>";
-    }
+    }*/
 
     // The widget form (for the backend )
     public function form($instance)
@@ -77,24 +77,26 @@ class CNAlpsWeather extends WP_Widget
         extract($args);
 
         // Check the widget options
-        $city     = isset($instance['text']) ? $instance['text'] : '';
-        $country = isset($instance['text']) ? $instance['text'] : '';
+        $city     = isset($instance['city']) ? $instance['city'] : '';
+        $country = isset($instance['country']) ? $instance['country'] : '';
 
         // WordPress core before_widget hook (always include )
         echo $before_widget;
 
         // Display the widget
-        echo '<div class="widget-text wp_widget_plugin_box">';
+        echo '<div class="widget-text wp_widget_plugin_box cnalps-weather-widget">
+            <div class="weather-title">Météo à ';
 
         // Display textarea field
         if ($city) {
-            echo '<p>' . $text . '</p>';
+            echo $city;
         }
 
         // Display text field
+        /*
         if ($country) {
-            echo '<p>' . $text . '</p>';
-        }
+            echo '<p>' . $country . '</p>';
+        }*/
 
         echo '</div>';
 
