@@ -1,37 +1,22 @@
 <?php
 
 /**
- * Plugin Name: My weather
+ * Plugin Name: My second weather
  */
 
 
-class CNAlpsWeather extends WP_Widget
+class CNAlpsSecondWeather extends WP_Widget
 {
-    // déclaration des méthodes
-    /*
-    public function __construct()
-    {
-        add_shortcode("my_weather", [$this, "print_weather"]);
-    }
-    */
-
     public function __construct()
     {
         parent::__construct(
-            'my_weather',
-            __('My Weather', 'text_domain'),
+            'my_second_weather',
+            __('My second Weather', 'text_domain'),
             array(
                 'customize_selective_refresh' => true,
             )
         );
     }
-    /*
-    function print_weather()
-    {
-        echo "<div class='cnalps-weather-widget'>
-                <div class='weather-city'>Météo à Crest</div>
-            </div>";
-    }*/
 
     // The widget form (for the backend )
     public function form($instance)
@@ -77,10 +62,11 @@ class CNAlpsWeather extends WP_Widget
         extract($args);
 
         // Check the widget options
-        $city     = isset($instance['city']) ? $instance['city'] : '';
+        $city = isset($instance['city']) ? $instance['city'] : '';
         $country = isset($instance['country']) ? $instance['country'] : '';
 
-        $data_API = $this->CallAPI($city, $country);
+        $response_API = wp_remote_get("https://www.weatherwp.com/api/common/publicWeatherForLocation.php?city=$city&country=$country&language=french");
+        $data_API = json_decode(wp_remote_retrieve_body( $response_API ));
         
         // WordPress core before_widget hook (always include )
         echo $before_widget;
@@ -101,22 +87,12 @@ class CNAlpsWeather extends WP_Widget
         echo $after_widget;
     }
 
-    function CallAPI($city, $country)
-    {
-        $curl = curl_init("https://www.weatherwp.com/api/common/publicWeatherForLocation.php?city=$city&country=$country&language=french");
-
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        $result = curl_exec($curl);
-
-        curl_close($curl);
-        return json_decode($result);
-    }
 }
 
 
 // Register the widget
-function my_register_custom_widget()
+function my_register_second_custom_widget()
 {
-    register_widget('CNAlpsWeather');
+    register_widget('CNAlpsSecondWeather');
 }
-add_action('widgets_init', 'my_register_custom_widget');
+add_action('widgets_init', 'my_register_second_custom_widget');
