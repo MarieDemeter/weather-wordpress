@@ -80,28 +80,36 @@ class CNAlpsWeather extends WP_Widget
         $city     = isset($instance['city']) ? $instance['city'] : '';
         $country = isset($instance['country']) ? $instance['country'] : '';
 
+        $data_API = $this->CallAPI($city, $country);
+        
         // WordPress core before_widget hook (always include )
         echo $before_widget;
 
         // Display the widget
         echo '<div class="widget-text wp_widget_plugin_box cnalps-weather-widget">
-            <div class="weather-title">Météo à ';
+            <div class="weather-title" style="text-align:center; background-color:#E8E8E8; border-radius:15px; padding:15px; margin:15px;">';
 
         // Display textarea field
-        if ($city) {
-            echo $city;
+        if ($data_API) {
+            echo '<img src="' . $data_API->icon . '" alt="icon météo">';
+            echo '<h4>' . $data_API->status_message . '<br>' . $data_API->temp . '° <br> </h4><p>' . $data_API->description . ' </p>';
         }
-
-        // Display text field
-        /*
-        if ($country) {
-            echo '<p>' . $country . '</p>';
-        }*/
 
         echo '</div>';
 
         // WordPress core after_widget hook (always include )
         echo $after_widget;
+    }
+
+    function CallAPI($city, $country)
+    {
+        $curl = curl_init("https://www.weatherwp.com/api/common/publicWeatherForLocation.php?city=$city&country=$country&language=french");
+
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $result = curl_exec($curl);
+
+        curl_close($curl);
+        return json_decode($result);
     }
 }
 
