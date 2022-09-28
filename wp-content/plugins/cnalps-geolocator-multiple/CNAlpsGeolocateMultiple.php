@@ -37,26 +37,25 @@ class GeolocatorMultiple
         .then(response => response.json())
         .then(response => {
 
-        let map$id = L.map('$id').fitBounds([
-            [response[0].lat, response[0].lon],
-            [response[1].lat, response[1].lon],
-        ],
-        {padding:[50,50]}
-        );
+        let map$id = L.map('$id');
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors'
         }).addTo(map$id);
 
 
-        var markers = L.markerClusterGroup();
+        let markers = L.markerClusterGroup();
+        let markers_bounds = [];
         response.forEach(marker => {
             markers.addLayer(L.marker([marker.lat, marker.lon]).addTo(map$id)
             .bindPopup(marker.title)
             .openPopup());
+            markers_bounds.push([marker.lat, marker.lon]);
         });
 
-        map$id.addLayer(markers);
+        map$id.addLayer(markers).fitBounds(markers_bounds,
+        {padding:[50,50]}
+        );
 
         })
         .catch(error => alert('Erreur : ' + error));
