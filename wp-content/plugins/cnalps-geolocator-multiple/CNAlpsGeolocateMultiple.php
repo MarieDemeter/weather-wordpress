@@ -28,6 +28,8 @@ class GeolocatorMultiple
 
         return "<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.8.0/leaflet.css'>
         <script src='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.8.0/leaflet.js'></script>
+        <link rel='stylesheet' href='/wp-content/plugins/cnalps-geolocator-multiple/Leaflet.markercluster-1.4.1/dist/MarkerCluster.Default.css'>
+        <script src='/wp-content/plugins/cnalps-geolocator-multiple/Leaflet.markercluster-1.4.1/dist/leaflet.markercluster.js'></script>
         
         <div id='$id'style='width: 300px; height: 300px;'></div>
         <script>
@@ -47,12 +49,15 @@ class GeolocatorMultiple
         }).addTo(map$id);
 
 
+        var markers = L.markerClusterGroup();
         response.forEach(marker => {
-            L.marker([marker.lat, marker.lon]).addTo(map$id)
+            markers.addLayer(L.marker([marker.lat, marker.lon]).addTo(map$id)
             .bindPopup(marker.title)
-            .openPopup();
+            .openPopup());
         });
-        
+
+        map$id.addLayer(markers);
+
         })
         .catch(error => alert('Erreur : ' + error));
             
