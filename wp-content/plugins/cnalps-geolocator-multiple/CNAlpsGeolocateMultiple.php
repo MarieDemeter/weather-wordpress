@@ -38,9 +38,11 @@ class GeolocatorMultiple
         let map$id = L.map('$id').fitBounds([
             [response[0].lat, response[0].lon],
             [response[1].lat, response[1].lon],
-        ]);
+        ],
+        {padding:[50,50]}
+        );
 
-        let map$id = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors'
         }).addTo(map$id);
 
