@@ -9,3 +9,5 @@ fetch("https://www.weatherwp.com/api/common/publicWeatherForLocation.php?city=" 
     })
     .catch(error => alert("Erreur : " + error));
 
+
+    
